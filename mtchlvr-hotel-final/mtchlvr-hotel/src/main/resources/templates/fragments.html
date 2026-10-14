@@ -1,0 +1,13 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header th:fragment="nav" class="nav">
+  <a class="brand" href="/"><span class="brand-mark">m</span><span>mtchlvr <small>HOTEL</small></span></a>
+  <nav><a href="/rooms">Rooms</a><a sec:authorize="hasRole('CUSTOMER')" href="/customer/reservations">My reservations</a><a sec:authorize="hasRole('MANAGER')" href="/manager">Manager dashboard</a></nav>
+  <div class="nav-actions"><a class="text-button" href="/login" sec:authorize="isAnonymous()">Sign in</a><form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()"><button class="text-button" type="submit">Log out ↗</button></form></div>
+</header>
+<div th:fragment="alerts" class="alerts">
+  <p class="alert success" th:if="${success}" th:text="${success}"></p>
+  <p class="alert error" th:if="${error}" th:text="${error}"></p>
+</div>
+</body></html>
