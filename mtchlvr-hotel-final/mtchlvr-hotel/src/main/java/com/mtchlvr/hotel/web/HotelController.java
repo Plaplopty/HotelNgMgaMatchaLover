@@ -47,10 +47,15 @@ public class HotelController {
             @RequestParam(name = "g-recaptcha-response", required = false) String captchaToken,
             jakarta.servlet.http.HttpServletRequest request) {
         if (!captcha.verify(captchaToken, request.getRemoteAddr())) errors.reject("captcha", "Please complete the Google reCAPTCHA check and try again.");
-        if (!form.password.equals(form.confirmPassword)) errors.rejectValue("confirmPassword", "mismatch", "Passwords do not match.");
-        if (users.existsByEmailIgnoreCase(form.email)) errors.rejectValue("email", "duplicate", "An account with this email already exists.");
+        if (!java.util.Objects.equals(form.password, form.confirmPassword)) {
+            errors.rejectValue("confirmPassword", "mismatch", "Passwords do not match.");
+        }
+        String normalizedEmail = form.email == null ? "" : form.email.trim();
+        if (!normalizedEmail.isBlank() && users.existsByEmailIgnoreCase(normalizedEmail)) {
+            errors.rejectValue("email", "duplicate", "An account with this email already exists.");
+        }
         if (errors.hasErrors()) return "register";
-        users.save(new AppUser(form.email.trim().toLowerCase(), encoder.encode(form.password),
+        users.save(new AppUser(normalizedEmail.toLowerCase(java.util.Locale.ROOT), encoder.encode(form.password),
                 form.fullName.trim(), "CUSTOMER", true));
         flash.addFlashAttribute("success", "Account created. You can now sign in.");
         return "redirect:/login";
