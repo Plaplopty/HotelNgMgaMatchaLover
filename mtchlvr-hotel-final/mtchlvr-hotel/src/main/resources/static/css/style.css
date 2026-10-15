@@ -2,3 +2,25 @@
 
 /* Accessibility/readability pass: stronger typography and visible keyboard focus. */
 body{font-weight:500}p,li,label,input,select,textarea,td{font-weight:600}.eyebrow,.muted,.lead{font-weight:600}.nav nav a,.text-button,.button,.table-action{font-weight:800}.room-info h3,.manager-section h2,.section-heading h2{font-weight:750}.page-title,.hero h1,.auth-card h1{font-weight:750}.status{font-weight:850;font-size:10px}th{font-weight:900;color:#43513c}input,select,textarea,button,a{outline-offset:3px}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #4b7d39} .alert{font-weight:700}
+
+
+/* Login password visibility control */
+.password-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.password-field input {
+    flex: 1;
+    min-width: 0;
+}
+
+.password-toggle {
+    cursor: pointer;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+}

@@ -129,10 +129,38 @@ public class HotelController {
         return "redirect:/manager";
     }
 
-    public static class RegisterForm {
-        @NotBlank @Size(min=2,max=80) public String fullName = "";
-        @NotBlank @Email @Size(max=160) public String email = "";
-        @NotBlank @Size(min=10,max=72) public String password = "";
-        @NotBlank public String confirmPassword = "";
+
+public static class RegisterForm {
+    @NotBlank @Size(min=8, max=80)
+    private String fullName = "";
+
+    @NotBlank @Email @Size(max=160)
+    private String email = "";
+
+    @NotBlank
+    @Size(min=10, max=70)
+    @Pattern(
+        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9\\s])\\S+$",
+        message = "Password must have uppercase and lowercase letters, a number, and a special symbol, with no spaces."
+    )
+    private String password = "";
+
+    @NotBlank
+    private String confirmPassword = "";
+
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public String getConfirmPassword() { return confirmPassword; }
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
+}
+
 }
