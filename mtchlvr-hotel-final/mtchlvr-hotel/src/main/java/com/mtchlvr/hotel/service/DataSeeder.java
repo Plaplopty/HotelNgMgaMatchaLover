@@ -17,8 +17,8 @@ public class DataSeeder {
             addType(rooms, "Deluxe", "2", new BigDecimal("2600"), 2);
             addType(rooms, "Suite", "3", new BigDecimal("4200"), 2);
             addType(rooms, "Family", "4", new BigDecimal("3500"), 4);
-            if (!users.existsByEmailIgnoreCase("manager@mtchlvr.local")) {
-                users.save(new AppUser("manager@mtchlvr.local", encoder.encode("ChangeMe123!"),
+            if (!users.existsByEmailIgnoreCase("cedihmatchalover@gmail.com")) {
+                users.save(new AppUser("cedihmatchalover@gmail.com", encoder.encode("5201314"),
                     "Hotel Manager", "MANAGER", true));
             }
         };
