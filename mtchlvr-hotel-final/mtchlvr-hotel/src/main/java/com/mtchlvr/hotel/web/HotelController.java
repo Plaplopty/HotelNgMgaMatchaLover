@@ -94,6 +94,7 @@ public class HotelController {
     @GetMapping("/manager") public String manager(Model model) {
         model.addAttribute("rooms", rooms.findAll());
         model.addAttribute("reservations", reservations.findAllByOrderByCreatedAtDesc());
+        model.addAttribute("reports", reports.findAllByOrderByCreatedAtDesc());
         return "manager";
     }
     @PostMapping("/customer/reports") public String submitReport(Authentication auth,
