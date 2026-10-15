@@ -22,7 +22,8 @@ public class HotelController {
     private final ReservationRepository reservations;
     private final ReservationService reservationService;
     private final CaptchaService captcha;
-    private final PasswordEncoder encoder;\n    private final ReportRepository reports;
+    private final PasswordEncoder encoder;
+    private final ReportRepository reports;
 
     public HotelController(RoomRepository rooms, UserRepository users, ReservationRepository reservations,
                            ReservationService reservationService, CaptchaService captcha, PasswordEncoder encoder, ReportRepository reports) {
@@ -95,7 +96,34 @@ public class HotelController {
         model.addAttribute("reservations", reservations.findAllByOrderByCreatedAtDesc());
         return "manager";
     }
-    @PostMapping("/customer/reports") public String submitReport(Authentication auth,\n            @RequestParam String category, @RequestParam String message, RedirectAttributes flash) {\n        String clean = message == null ? "" : message.trim();\n        if (clean.isBlank() || clean.length() > 2000 || category == null ||\n                !java.util.List.of("SERVICE", "ROOM", "BOOKING", "WEBSITE", "OTHER").contains(category)) {\n            flash.addFlashAttribute("error", "Choose a report category and enter a message of up to 2,000 characters.");\n            return "redirect:/customer/reservations#report";\n        }\n        AppUser customer = users.findByEmailIgnoreCase(auth.getName()).orElseThrow();\n        reports.save(new GuestReport(customer, category, clean));\n        flash.addFlashAttribute("success", "Thank you. Your report was sent to the hotel manager.");\n        return "redirect:/customer/reservations#report";\n    }\n\n    @GetMapping("/manager/reports") public String managerReports(Model model) {\n        model.addAttribute("reports", reports.findAllByOrderByCreatedAtDesc());\n        return "reports";\n    }\n\n    @PostMapping("/manager/reports/{id}/status") public String updateReportStatus(@PathVariable Long id,\n            @RequestParam @Pattern(regexp="OPEN|RESOLVED") String status, RedirectAttributes flash) {\n        GuestReport report = reports.findById(id).orElse(null);\n        if (report == null) flash.addFlashAttribute("error", "Report not found.");\n        else { report.setStatus(status); reports.save(report); flash.addFlashAttribute("success", "Report status updated."); }\n        return "redirect:/manager/reports";\n    }\n\n    @PostMapping("/manager/rooms/{id}/deactivate") public String deactivateRoom(@PathVariable Long id, RedirectAttributes flash) {
+    @PostMapping("/customer/reports") public String submitReport(Authentication auth,
+            @RequestParam String category, @RequestParam String message, RedirectAttributes flash) {
+        String clean = message == null ? "" : message.trim();
+        if (clean.isBlank() || clean.length() > 2000 || category == null ||
+                !java.util.List.of("SERVICE", "ROOM", "BOOKING", "WEBSITE", "OTHER").contains(category)) {
+            flash.addFlashAttribute("error", "Choose a report category and enter a message of up to 2,000 characters.");
+            return "redirect:/customer/reservations#report";
+        }
+        AppUser customer = users.findByEmailIgnoreCase(auth.getName()).orElseThrow();
+        reports.save(new GuestReport(customer, category, clean));
+        flash.addFlashAttribute("success", "Thank you. Your report was sent to the hotel manager.");
+        return "redirect:/customer/reservations#report";
+    }
+
+    @GetMapping("/manager/reports") public String managerReports(Model model) {
+        model.addAttribute("reports", reports.findAllByOrderByCreatedAtDesc());
+        return "reports";
+    }
+
+    @PostMapping("/manager/reports/{id}/status") public String updateReportStatus(@PathVariable Long id,
+            @RequestParam @Pattern(regexp="OPEN|RESOLVED") String status, RedirectAttributes flash) {
+        GuestReport report = reports.findById(id).orElse(null);
+        if (report == null) flash.addFlashAttribute("error", "Report not found.");
+        else { report.setStatus(status); reports.save(report); flash.addFlashAttribute("success", "Report status updated."); }
+        return "redirect:/manager/reports";
+    }
+
+    @PostMapping("/manager/rooms/{id}/deactivate") public String deactivateRoom(@PathVariable Long id, RedirectAttributes flash) {
         Room room = rooms.findById(id).orElse(null);
         if (room == null) {
             flash.addFlashAttribute("error", "Room not found.");
