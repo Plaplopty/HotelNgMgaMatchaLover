@@ -12,3 +12,13 @@ The Unsplash license generally permits free use, including commercial use, witho
 ## Icons
 
 The interface primarily uses text glyphs and CSS-drawn decorative elements rather than third-party icon files. No generated images are used.
+
+## Room card photography
+
+Room cards also use remote Unsplash CDN photos:
+- https://images.unsplash.com/photo-1611892440504-42a792e24d32
+- https://images.unsplash.com/photo-1590490360182-c33d57733427
+- https://images.unsplash.com/photo-1566665797739-1674de7a421a
+- Photo discovery: https://unsplash.com/s/photos/hotel-bedroom
+
+Review the individual source pages, current license, and availability before production use. The images are remotely hosted, not generated, and may change or become unavailable.
