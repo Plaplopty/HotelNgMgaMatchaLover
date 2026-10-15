@@ -4,33 +4,48 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('input[name="checkIn"]').forEach((input) => {
     input.min = localDate;
     input.addEventListener("change", () => {
-      const form = input.closest("form");
-      const out = form?.querySelector('input[name="checkOut"]');
-      if (out) {
-        out.min = input.value || localDate;
-        if (out.value && out.value <= input.value) out.value = "";
-      }
+      const out = input.closest("form")?.querySelector('input[name="checkOut"]');
+      if (out) { out.min = input.value || localDate; if (out.value && out.value <= input.value) out.value = ""; }
     });
   });
-  document.querySelectorAll('input[name="checkOut"]').forEach((input) => {
-    input.min = localDate;
-  });
-});
+  document.querySelectorAll('input[name="checkOut"]').forEach((input) => input.min = localDate);
 
-// Confirmation for important actions. Forms with an explicit onsubmit handler
-// already provide their own confirmation and must not receive a second prompt.
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll("form").forEach((form) => {
-    if (form.hasAttribute("onsubmit") || form.dataset.confirm === "false") return;
-    const submit = form.querySelector('button[type="submit"]');
-    const label = (submit?.textContent || "").trim().toLowerCase();
-    let message = null;
-    if (label.includes("delete")) message = "Are you sure you want to delete this item? This action may not be reversible.";
-    else if (label.includes("approve")) message = "Are you sure you want to approve this reservation?";
-    else if (label.includes("reject")) message = "Are you sure you want to reject this reservation?";
-    else if (label.includes("cancel")) message = "Are you sure you want to continue with cancellation?";
-    if (message) form.addEventListener("submit", (event) => {
-      if (!window.confirm(message)) event.preventDefault();
+  document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const input = document.getElementById(button.dataset.passwordToggle);
+      if (!input) return;
+      const visible = input.type === "password";
+      input.type = visible ? "text" : "password";
+      button.textContent = visible ? "Hide" : "Show";
+      button.setAttribute("aria-label", visible ? "Hide password" : "Show password");
+      button.setAttribute("aria-pressed", String(visible));
     });
   });
+
+  const modal = document.getElementById("confirm-modal");
+  if (modal) {
+    const message = modal.querySelector("[data-confirm-message]");
+    const cancel = modal.querySelector("[data-confirm-cancel]");
+    const proceed = modal.querySelector("[data-confirm-proceed]");
+    let pendingForm = null;
+    document.querySelectorAll("form[data-confirm]").forEach(form => form.addEventListener("submit", event => {
+      if (form.dataset.confirmed === "true") { form.dataset.confirmed = "false"; return; }
+      event.preventDefault();
+      pendingForm = form;
+      message.textContent = form.dataset.confirm || "Are you sure you want to continue?";
+      modal.hidden = false;
+      cancel.focus();
+    }));
+    const close = () => { modal.hidden = true; pendingForm = null; };
+    cancel.addEventListener("click", close);
+    modal.addEventListener("click", event => { if (event.target === modal) close(); });
+    proceed.addEventListener("click", () => {
+      if (!pendingForm) return;
+      const form = pendingForm;
+      close();
+      form.dataset.confirmed = "true";
+      form.requestSubmit();
+    });
+    document.addEventListener("keydown", event => { if (event.key === "Escape" && !modal.hidden) close(); });
+  }
 });
