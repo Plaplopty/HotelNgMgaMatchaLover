@@ -43,3 +43,14 @@ body{font-weight:500}p,li,label,input,select,textarea,td{font-weight:600}.eyebro
 .button.secondary{background:transparent;color:var(--forest);border-color:var(--line)}
 .button.secondary:hover{background:#f3f5ed}
 @media(max-width:580px){.manager-nav{position:static}.confirm-actions{flex-direction:column-reverse}.confirm-actions .button{width:100%}}
+
+
+/* Real hotel photography treatment */
+.photo-hero{position:relative;overflow:hidden;background:#e7e4d8!important;isolation:isolate}
+.photo-hero .hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-2}
+.photo-hero .photo-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,39,29,.05),rgba(24,39,29,.42));z-index:-1}
+.photo-hero .sun,.photo-hero .arch,.photo-hero .art-label,.photo-hero .art-caption{display:none}
+.photo-hero .photo-overlay{z-index:0}
+.photo-hero .art-caption{display:block;position:absolute;bottom:22px;left:24px;color:#fff;letter-spacing:.12em;font-size:.68rem;z-index:1}
+.report-message{max-width:380px;white-space:pre-wrap;overflow-wrap:anywhere}
+.password-field{display:flex;gap:8px;align-items:center}.password-field input{min-width:0;flex:1}.password-toggle{border:1px solid #d8d8cb;background:#f7f5ec;color:#38664b;border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit}
