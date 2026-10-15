@@ -2,8 +2,10 @@
 /workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/config/CaptchaLoginFilter.java
 /workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/config/SecurityConfig.java
 /workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/model/AppUser.java
+/workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/model/GuestReport.java
 /workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/model/Reservation.java
 /workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/model/Room.java
+/workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/repo/ReportRepository.java
 /workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/repo/ReservationRepository.java
 /workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/repo/RoomRepository.java
 /workspaces/final-matcha/mtchlvr-hotel-final/mtchlvr-hotel/src/main/java/com/mtchlvr/hotel/repo/UserRepository.java

@@ -3,6 +3,7 @@ com/mtchlvr/hotel/model/Room.class
 com/mtchlvr/hotel/repo/UserRepository.class
 com/mtchlvr/hotel/config/CaptchaLoginFilter.class
 com/mtchlvr/hotel/web/HotelController.class
+com/mtchlvr/hotel/model/GuestReport.class
 com/mtchlvr/hotel/config/SecurityConfig.class
 com/mtchlvr/hotel/MtchlvrHotelApplication.class
 com/mtchlvr/hotel/web/ChatController$ChatResponse.class
@@ -14,5 +15,6 @@ com/mtchlvr/hotel/repo/RoomRepository.class
 com/mtchlvr/hotel/model/Reservation.class
 com/mtchlvr/hotel/service/DataSeeder.class
 com/mtchlvr/hotel/model/AppUser.class
+com/mtchlvr/hotel/repo/ReportRepository.class
 com/mtchlvr/hotel/web/ChatController$ChatRequest.class
 com/mtchlvr/hotel/service/GeminiChatService.class
