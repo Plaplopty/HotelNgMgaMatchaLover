@@ -24,3 +24,22 @@ body{font-weight:500}p,li,label,input,select,textarea,td{font-weight:600}.eyebro
     background: transparent;
     color: inherit;
 }
+
+/* Manager workspace navigation and centered confirmation dialog */
+.manager-nav{position:sticky;top:8px;z-index:20;display:flex;gap:10px;flex-wrap:wrap;padding:12px;margin:24px 0 28px;background:#fffef9eF;border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px #2546180a}
+.manager-nav a{padding:10px 14px;border-radius:9px;background:#f4f6ed;color:var(--forest);font-size:12px;font-weight:800}
+.manager-nav a:hover{background:var(--cream)}
+.manager-section{scroll-margin-top:90px}
+.subsection-title{font-size:17px;margin:28px 0 12px}
+.password-field{display:flex;align-items:center;gap:8px;width:100%}
+.password-field input{flex:1;min-width:0}
+.password-toggle{flex-shrink:0;border:1px solid #dfe4d7;border-radius:8px;padding:10px 13px;background:#f7f8f1;color:var(--forest);font-size:12px;font-weight:800;cursor:pointer}
+.confirm-backdrop[hidden]{display:none}
+.confirm-backdrop{position:fixed;inset:0;z-index:20000;display:grid;place-items:center;padding:20px;background:rgba(24,39,20,.48);backdrop-filter:blur(5px)}
+.confirm-card{width:min(100%,430px);padding:30px;background:var(--white);border:1px solid var(--line);border-radius:20px;box-shadow:0 24px 90px #14240f40}
+.confirm-card h2{margin:10px 0;font-size:27px;letter-spacing:-.04em}
+.confirm-card p{color:var(--muted);font-size:14px;line-height:1.7}
+.confirm-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:24px}
+.button.secondary{background:transparent;color:var(--forest);border-color:var(--line)}
+.button.secondary:hover{background:#f3f5ed}
+@media(max-width:580px){.manager-nav{position:static}.confirm-actions{flex-direction:column-reverse}.confirm-actions .button{width:100%}}
