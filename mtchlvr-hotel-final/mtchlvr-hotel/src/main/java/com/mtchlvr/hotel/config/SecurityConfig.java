@@ -1,4 +1,3 @@
-
 package com.mtchlvr.hotel.config;
 
 import com.mtchlvr.hotel.repo.UserRepository;
@@ -48,7 +47,11 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/login")
                 .successHandler((request, response, authentication) -> {
-                    response.sendRedirect("/");
+                    boolean manager = authentication.getAuthorities().stream()
+                        .anyMatch(authority ->
+                            authority.getAuthority().equals("ROLE_MANAGER"));
+                    String destination = manager ? "/manager" : "/customer/reservations";
+                    response.sendRedirect(request.getContextPath() + destination);
                 })
                 .permitAll()
             )
