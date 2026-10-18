@@ -18,7 +18,9 @@ import java.time.Duration;
 import java.util.Map;
 
 @Service
-public class GeminiChatService {\n\n    private static final Logger log = LoggerFactory.getLogger(GeminiChatService.class);
+public class GeminiChatService {
+
+    private static final Logger log = LoggerFactory.getLogger(GeminiChatService.class);
 
     @Value("${gemini.api.key:}")
     private String apiKey;
@@ -33,7 +35,8 @@ public class GeminiChatService {\n\n    private static final Logger log = Logger
 
     public String reply(String message) {
         if (apiKey == null || apiKey.isBlank()) {
-            log.warn("Gemini chatbot request skipped: GEMINI_API_KEY is not configured.");\n            return "The chat assistant is not configured yet. Please set GEMINI_API_KEY in the Codespaces environment and restart the app.";
+            log.warn("Gemini chatbot request skipped: GEMINI_API_KEY is not configured.");
+            return "The chat assistant is not configured yet. Please set GEMINI_API_KEY in the Codespaces environment and restart the app.";
         }
 
         try {
