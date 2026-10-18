@@ -29,8 +29,9 @@ public class GeminiChatService {
     private String apiUrl;
 
     private final ObjectMapper mapper = new ObjectMapper();
+    private static final int MAX_ATTEMPTS = 3;
     private final HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(15))
+            .connectTimeout(Duration.ofSeconds(20))
             .build();
 
     public String reply(String message) {
@@ -62,16 +63,46 @@ public class GeminiChatService {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(apiUrl + "?key=" + URLEncoder.encode(apiKey, StandardCharsets.UTF_8)))
-                    .timeout(Duration.ofSeconds(30))
+                    .timeout(Duration.ofSeconds(60))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
-            HttpResponse<String> response = client.send(
-                    request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = null;
+            for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+                try {
+                    response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                } catch (java.net.http.HttpTimeoutException ex) {
+                    if (attempt == MAX_ATTEMPTS) {
+                        log.warn("Gemini API request timed out after {} attempts.", attempt);
+                        return "The assistant is taking too long to respond. Please try again in a moment.";
+                    }
+                    log.warn("Gemini API request timed out (attempt {}/{}); retrying.", attempt, MAX_ATTEMPTS);
+                    pauseBeforeRetry(attempt);
+                    continue;
+                }
 
+                int status = response.statusCode();
+                if ((status == 429 || status == 503 || status == 502 || status == 504)
+                        && attempt < MAX_ATTEMPTS) {
+                    log.warn("Gemini API returned retryable HTTP {} (attempt {}/{}); retrying.",
+                            status, attempt, MAX_ATTEMPTS);
+                    pauseBeforeRetry(attempt);
+                    continue;
+                }
+                break;
+            }
+
+            if (response == null) {
+                return "Sorry, the assistant is temporarily unavailable. Please try again.";
+            }
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                // Do not retry permanent errors such as invalid requests or API-key failures.
                 log.error("Gemini API returned HTTP {}: {}", response.statusCode(), response.body());
+                if (response.statusCode() == 429 || response.statusCode() == 503
+                        || response.statusCode() == 502 || response.statusCode() == 504) {
+                    return "Gemini is busy right now. Please wait a moment and try again.";
+                }
                 return "Sorry, the assistant is temporarily unavailable. Please try again.";
             }
 
@@ -92,5 +123,10 @@ public class GeminiChatService {
             log.error("Gemini chatbot request failed.", ex);
             return "Sorry, the assistant is temporarily unavailable. Please try again.";
         }
+    }
+
+    private void pauseBeforeRetry(int attempt) throws InterruptedException {
+        // Short exponential backoff: 1 second, then 2 seconds.
+        Thread.sleep(1000L * attempt);
     }
 }
