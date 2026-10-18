@@ -104,7 +104,7 @@ public class HotelController {
     }
 
     @GetMapping("/manager/history") public String managerHistory(Model model) {
-        model.addAttribute("reservations", reservations.findAllByOrderByCreatedAtDesc());
+        model.addAttribute("reservations", reservations.findAllByOrderByCreatedAtDesc().stream().filter(Reservation::isHistoryVisible).toList());
         return "reservation-history";
     }
 
@@ -181,7 +181,7 @@ public class HotelController {
 
 
     private boolean isProcessedHistory(Reservation r) {
-        return !java.util.List.of("PENDING", "CANCELLATION_REQUESTED").contains(r.getStatus());
+        return r.isHistoryVisible() && !java.util.List.of("PENDING", "CANCELLATION_REQUESTED").contains(r.getStatus());
     }
 
     @PostMapping("/manager/history/{id}/delete")
@@ -190,10 +190,11 @@ public class HotelController {
         if (r == null || !isProcessedHistory(r)) {
             flash.addFlashAttribute("error", "Processed history record not found.");
         } else {
-            reservations.delete(r);
+            r.setHistoryVisible(false);
+            reservations.save(r);
             flash.addFlashAttribute("success", "History record deleted.");
         }
-        return "redirect:/manager#history";
+        return "redirect:/manager/history";
     }
 
     @PostMapping("/manager/history/clear")
@@ -203,7 +204,8 @@ public class HotelController {
         if (processed.isEmpty()) {
             flash.addFlashAttribute("error", "There are no processed history records to delete.");
         } else {
-            reservations.deleteAllInBatch(processed);
+            processed.forEach(r -> r.setHistoryVisible(false));
+            reservations.saveAll(processed);
             flash.addFlashAttribute("success", "Processed reservation history cleared.");
         }
         return "redirect:/manager#history";
