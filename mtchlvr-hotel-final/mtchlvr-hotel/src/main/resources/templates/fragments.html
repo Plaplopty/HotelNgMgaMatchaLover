@@ -11,7 +11,7 @@
   <p class="alert error" th:if="${error}" th:text="${error}"></p>
 </div>
 <div th:fragment="managerConfirm" id="confirm-modal" class="confirm-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="confirm-title"><section class="confirm-card"><span class="eyebrow">PLEASE CONFIRM</span><h2 id="confirm-title">Are you sure?</h2><p data-confirm-message>Are you sure you want to continue?</p><div class="confirm-actions"><button type="button" class="button secondary" data-confirm-cancel>Go back</button><button type="button" class="button" data-confirm-proceed>Yes, continue</button></div></section></div>
-<div th:fragment="chatbot">
+<div th:fragment="chatbot" sec:authorize="hasRole('CUSTOMER')">
   <meta name="_csrf" th:content="${_csrf.token}"><meta name="_csrf_header" th:content="${_csrf.headerName}">
   <button id="chat-toggle" type="button" aria-label="Open hotel chat"><span class="chat-leaf" aria-hidden="true">m</span></button>
 
@@ -86,7 +86,7 @@
           addMessage(data.reply || 'Sorry, I could not answer that.', 'bot-message');
         } catch (error) {
           thinking.remove();
-          addMessage(error.message === "Request failed" ? "The chat service could not answer. Check that GEMINI_API_KEY is set in your Codespace and restart the app." : "Sorry, chat is temporarily unavailable. Please try again.", 'bot-message');
+          addMessage(error.message === "Request failed" ? "The chat service could not answer. Check that GROQ_API_KEY is set in your Codespace and restart the app." : "Sorry, chat is temporarily unavailable. Please try again.", 'bot-message');
         } finally {
           send.disabled = false;
           input.focus();
