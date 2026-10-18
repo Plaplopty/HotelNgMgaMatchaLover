@@ -164,6 +164,36 @@ public class HotelController {
     }
 
 
+    private boolean isProcessedHistory(Reservation r) {
+        return !java.util.List.of("PENDING", "CANCELLATION_REQUESTED").contains(r.getStatus());
+    }
+
+    @PostMapping("/manager/history/{id}/delete")
+    public String deleteHistoryRecord(@PathVariable Long id, RedirectAttributes flash) {
+        Reservation r = reservations.findById(id).orElse(null);
+        if (r == null || !isProcessedHistory(r)) {
+            flash.addFlashAttribute("error", "Processed history record not found.");
+        } else {
+            reservations.delete(r);
+            flash.addFlashAttribute("success", "History record deleted.");
+        }
+        return "redirect:/manager#history";
+    }
+
+    @PostMapping("/manager/history/clear")
+    public String clearHistory(RedirectAttributes flash) {
+        java.util.List<Reservation> processed = reservations.findAllByOrderByCreatedAtDesc()
+            .stream().filter(this::isProcessedHistory).toList();
+        if (processed.isEmpty()) {
+            flash.addFlashAttribute("error", "There are no processed history records to delete.");
+        } else {
+            reservations.deleteAllInBatch(processed);
+            flash.addFlashAttribute("success", "Processed reservation history cleared.");
+        }
+        return "redirect:/manager#history";
+    }
+
+
 public static class RegisterForm {
     @NotBlank @Size(min=8, max=80)
     private String fullName = "";
