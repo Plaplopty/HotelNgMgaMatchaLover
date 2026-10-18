@@ -71,6 +71,7 @@ public class GeminiChatService {
                     request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                log.error("Gemini API returned HTTP {}: {}", response.statusCode(), response.body());
                 return "Sorry, the assistant is temporarily unavailable. Please try again.";
             }
 
@@ -85,8 +86,10 @@ public class GeminiChatService {
             return answer.asText();
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
+            log.warn("Gemini chatbot request was interrupted.", ex);
             return "The request was interrupted. Please try again.";
         } catch (Exception ex) {
+            log.error("Gemini chatbot request failed.", ex);
             return "Sorry, the assistant is temporarily unavailable. Please try again.";
         }
     }
