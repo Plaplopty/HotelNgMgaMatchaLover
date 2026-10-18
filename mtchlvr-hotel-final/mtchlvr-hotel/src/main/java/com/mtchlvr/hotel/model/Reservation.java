@@ -17,6 +17,8 @@ public class Reservation {
     @Column(nullable = false) private LocalDate checkOut;
     @Column(nullable = false) private String status = "PENDING";
     @Column(nullable = false) private Instant createdAt = Instant.now();
+    // Soft-hide a processed record from manager history without deleting the reservation itself.
+    @Column private Boolean historyVisible = true;
 
     protected Reservation() {}
     public Reservation(AppUser customer, Room room, LocalDate checkIn, LocalDate checkOut) {
@@ -29,5 +31,7 @@ public class Reservation {
     public LocalDate getCheckOut() { return checkOut; }
     public String getStatus() { return status; }
     public Instant getCreatedAt() { return createdAt; }
+    public boolean isHistoryVisible() { return historyVisible == null || historyVisible; }
+    public void setHistoryVisible(boolean visible) { historyVisible = visible; }
     public void setStatus(String v) { status = v; }
 }
