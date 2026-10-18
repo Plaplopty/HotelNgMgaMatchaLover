@@ -36,11 +36,11 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/", "/rooms", "/register", "/login",
-                    "/css/**", "/js/**", "/error", "/favicon.ico", "/api/chat/**"
+                    "/css/**", "/js/**", "/error", "/favicon.ico"
                 ).permitAll()
                 .requestMatchers("/manager/**").hasRole("MANAGER")
                 .requestMatchers(
-                    "/customer/**", "/reservations/**"
+                    "/customer/**", "/reservations/**", "/api/chat/**"
                 ).hasRole("CUSTOMER")
                 .anyRequest().authenticated()
             )
