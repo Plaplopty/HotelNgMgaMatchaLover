@@ -97,6 +97,22 @@ public class HotelController {
         model.addAttribute("reports", reports.findAllByOrderByCreatedAtDesc());
         return "manager";
     }
+
+    @GetMapping("/manager/reservation-requests") public String managerReservationRequests(Model model) {
+        model.addAttribute("reservations", reservations.findAllByOrderByCreatedAtDesc());
+        return "reservation-requests";
+    }
+
+    @GetMapping("/manager/history") public String managerHistory(Model model) {
+        model.addAttribute("reservations", reservations.findAllByOrderByCreatedAtDesc());
+        return "reservation-history";
+    }
+
+    @GetMapping("/manager/room-management") public String roomManagement(Model model) {
+        model.addAttribute("rooms", rooms.findAll());
+        return "room-management";
+    }
+
     @PostMapping("/customer/reports") public String submitReport(Authentication auth,
             @RequestParam String category, @RequestParam String message, RedirectAttributes flash) {
         String clean = message == null ? "" : message.trim();
