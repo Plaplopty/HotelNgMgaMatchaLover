@@ -23,6 +23,11 @@ public class ChatController {
             @Valid @RequestBody ChatRequest request,
             Authentication authentication) {
 
+        if (authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"))) {
+            throw new org.springframework.security.access.AccessDeniedException("Manager chat is disabled");
+        }
+
         return new ChatResponse(chatService.reply(request.message().trim()));
     }
 
