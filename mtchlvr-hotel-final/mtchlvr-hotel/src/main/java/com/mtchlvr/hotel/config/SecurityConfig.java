@@ -59,7 +59,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .permitAll()
             )
-            .csrf(csrf -> {});
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/chat"));
 
         http.addFilterBefore(
             new CaptchaLoginFilter(captcha),
