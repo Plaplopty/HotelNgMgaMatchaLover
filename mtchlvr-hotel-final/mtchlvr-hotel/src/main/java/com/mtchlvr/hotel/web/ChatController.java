@@ -1,20 +1,22 @@
 
 package com.mtchlvr.hotel.web;
 
-import com.mtchlvr.hotel.service.GeminiChatService;
+import com.mtchlvr.hotel.service.GroqChatService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/chat")
+@PreAuthorize("hasRole('CUSTOMER')")
 public class ChatController {
 
-    private final GeminiChatService chatService;
+    private final GroqChatService chatService;
 
-    public ChatController(GeminiChatService chatService) {
+    public ChatController(GroqChatService chatService) {
         this.chatService = chatService;
     }
 
