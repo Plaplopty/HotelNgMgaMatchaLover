@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -14,7 +18,7 @@ import java.time.Duration;
 import java.util.Map;
 
 @Service
-public class GeminiChatService {
+public class GeminiChatService {\n\n    private static final Logger log = LoggerFactory.getLogger(GeminiChatService.class);
 
     @Value("${gemini.api.key:}")
     private String apiKey;
@@ -29,7 +33,7 @@ public class GeminiChatService {
 
     public String reply(String message) {
         if (apiKey == null || apiKey.isBlank()) {
-            return "The chat assistant is not configured yet. Please contact the hotel.";
+            log.warn("Gemini chatbot request skipped: GEMINI_API_KEY is not configured.");\n            return "The chat assistant is not configured yet. Please set GEMINI_API_KEY in the Codespaces environment and restart the app.";
         }
 
         try {
@@ -54,7 +58,7 @@ public class GeminiChatService {
             ));
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(apiUrl + "?key=" + apiKey))
+                    .uri(URI.create(apiUrl + "?key=" + URLEncoder.encode(apiKey, StandardCharsets.UTF_8)))
                     .timeout(Duration.ofSeconds(30))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
