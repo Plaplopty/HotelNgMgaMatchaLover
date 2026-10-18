@@ -208,7 +208,7 @@ public class HotelController {
             reservations.saveAll(processed);
             flash.addFlashAttribute("success", "Processed reservation history cleared.");
         }
-        return "redirect:/manager#history";
+        return "redirect:/manager/history";
     }
 
 
