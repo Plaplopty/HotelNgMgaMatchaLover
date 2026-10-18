@@ -23,13 +23,6 @@ public class ChatController {
             @Valid @RequestBody ChatRequest request,
             Authentication authentication) {
 
-        if (authentication == null ||
-                authentication.getAuthorities().stream()
-                        .noneMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))) {
-            throw new org.springframework.security.access.AccessDeniedException(
-                    "Customers only");
-        }
-
         return new ChatResponse(chatService.reply(request.message().trim()));
     }
 
